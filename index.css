@@ -1,0 +1,89 @@
+.nav-menu{
+    display: flex;
+    justify-content:space-between;
+    flex-direction: row;
+    width: 100%;
+    border-radius: 10px;
+    margin-left: 40px;
+    margin-right: 40px;
+    background-image: linear-gradient(0.25turn, #F7F599, white);
+
+}
+
+h4{
+    position: relative;
+    align-self: flex-start;
+    width: 40px;
+    font-size: 15px;
+}
+
+a{
+    display: flex;
+    text-decoration: none;
+    color:black
+}
+
+a:hover{
+    text-shadow: 1px 10px 1px #F0EC55;
+    transform: scale(1.3);
+    transition: 1s;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.card{
+    display: flex;
+
+    width: 500px;
+    height: 100px;
+    margin-top: 5vh;
+    border: 2px solid #F7F599;
+    border-radius: 5px;
+
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+}
+
+.btnedit{
+    background-color: #F0EC55;
+    border: 1px solid #F7F599;
+    border-radius: 5px;
+    width: 100px;
+    height: 50px;
+    position: absolute;
+    margin-top: 15vh;
+    margin-right: 10vw;
+}
+
+.btndlt{
+    background-color: #F0EC55;
+    border: 1px solid #F7F599;
+    border-radius: 5px;
+    width: 100px;
+    height: 50px;
+    position: absolute;
+    margin-top: 15vh; 
+    margin-left: 10vw;
+}
+
+.editbtn{
+    background-color: #F0EC55;
+    border: 1px solid #F7F599;
+    border-radius: 5px;
+
+}
+
+.cards{
+    margin: 5vh;
+}
+
+li{
+   list-style:none;
+}
