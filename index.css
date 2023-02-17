@@ -17,13 +17,17 @@ h4{
     font-size: 15px;
 }
 
+h3{
+    margin: auto;
+}
+
 a{
     display: flex;
     text-decoration: none;
     color:black
 }
 
-a:hover{
+h4:hover{
     text-shadow: 1px 10px 1px #F0EC55;
     transform: scale(1.3);
     transition: 1s;
@@ -41,17 +45,17 @@ body{
     display: flex;
 
     width: 500px;
-    height: 100px;
+    height: auto;
     margin-top: 5vh;
     border: 2px solid #F7F599;
     border-radius: 5px;
 
     flex-direction: column;
     align-items: center;
-    gap: 7px;
+    gap: 10px;
 }
 
-.btnedit{
+.btnnew{
     background-color: #F0EC55;
     border: 1px solid #F7F599;
     border-radius: 5px;
@@ -60,6 +64,11 @@ body{
     position: absolute;
     margin-top: 15vh;
     margin-right: 10vw;
+}
+
+.btnnew:hover{
+    transform: scale(1.1);
+    transition: 0.5s;
 }
 
 .btndlt{
@@ -73,11 +82,21 @@ body{
     margin-left: 10vw;
 }
 
+.btndlt:hover{
+    transform: scale(1.1);
+    background-color: red;
+    transition: 0.5s;
+}
+
 .editbtn{
     background-color: #F0EC55;
     border: 1px solid #F7F599;
     border-radius: 5px;
+}
 
+.editbtn:hover{
+    color:white;
+    transition: 0.2s;
 }
 
 .cards{
@@ -86,4 +105,51 @@ body{
 
 li{
    list-style:none;
+}
+
+.dltform{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    position: absolute;
+    top: 25vh;
+
+}
+
+.btnform{
+    padding: 5px;
+    display: flex;
+    background-color: #F0EC55;
+    border: 1px solid #F7F599;
+    border-radius: 5px;
+}
+
+.btnform:hover{
+    transform: scale(1.1);
+    background-color: red;
+    border: 0;
+    transition: 0.5s;
+}
+
+.newForm{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    position: absolute;
+    top: 25vh;
+}
+
+.filebtn{
+    border: 3px #F7F599 solid;
+    padding: 3px;
+}
+
+.img{
+    width:200px;
+    height:180px;
+    border: 1px solid #F7F599;
+    background-size: contain;
+    background-repeat: no-repeat;
 }

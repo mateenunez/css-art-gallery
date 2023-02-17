@@ -1,33 +1,61 @@
 
-import {deleteCard, saveCard, onListCards, getCard, editCard} from "../src/firebase.js"
+import {deleteCard, saveCard, onListCards, getCard, editCard, uploadImg, getImg} from "../src/firebase.js"
 
 //Traer datos
 window.addEventListener('DOMContentLoaded', async () => {
     let a;
     let b;
+    let id;
+    let count = -1;
+    let img;
     await onListCards((querySnapshot) => {
-        querySnapshot.forEach(doc => {
+        querySnapshot.forEach(async doc => {
             const cardObj = doc.data();
+            let img = await getImg(cardObj.title);
             a = cardObj.title;
             b = cardObj.description;
-            let id = doc.id;
-            newCard(a,b,id);
-
+            id = doc.id;
+            count=count+1;
+            newCard(a,b,id,img,count);
+            
             //Aca llamamos a los botones de clase btnedit dentro de las cards.
-            let card = document.getElementById(id) 
-            let btnsEdit = card.querySelectorAll('.editbtn')
+            let Artcard = document.getElementById(id) 
+            let btnsEdit = Artcard.querySelectorAll('.editbtn')
             btnsEdit.forEach(btn => {
             // Destructuring
                 btn.addEventListener('click', async () => {
                     let doc = await getCard(id);
                     let cardObj = doc.data();
-                    let title = prompt('Editar titulo', cardObj.title);
-                    let description = prompt('Editar descripcion', cardObj.description);
-                    let newFields = {
-                        title: title,
-                        description: description
-                    };
-                    editCard(id, newFields);
+                    // Edit form mismo q new
+                    if (typeof document.forms[0] == 'undefined'){
+                        const form = document.createElement('form');
+                        form.innerHTML = `<form>
+                        <h3>Editar dibujo</h2>
+                        <input type="text" id="title" placeholder="${cardObj.title}">
+                        <input type="text" id="desc" placeholder="${cardObj.description}">
+                        <input type="submit" class="btnform" value="OK">
+                        </form>`;
+                        form.id='form';
+                        form.className='newForm';
+                        let div = document.getElementById('card');
+                        div.style.margin = '13vh';
+                        document.body.append(form);
+                        
+                        form.addEventListener('submit',(e) => {
+                            const title = document.getElementById('title').value;
+                            const description = document.querySelector('#desc').value;
+                            if (title!=null && description!=null && title!='' && description!=''){
+                                let newFields = {
+                                    title: title,
+                                    description: description
+                                };
+                                editCard(id, newFields);
+                            }
+                            e.preventDefault();
+                        });
+                    }
+
+                    
                 })
             })
         })
@@ -38,35 +66,86 @@ window.addEventListener('DOMContentLoaded', async () => {
 })
 
 //Mostrar cards
-
 function crear(){
-    let a = prompt('Nuevo titulo', 'Titulo');
-    let b = prompt('Nueva descripcion', 'Descripcion');
-    saveCard(a,b);
+    //Crear form + img form
+    if (typeof document.forms[0] == 'undefined'){
+        const form = document.createElement('form');
+        form.innerHTML = `<form>
+        <input type="text" id="title" placeholder="Title">
+        <input type="text" id="desc" placeholder="Description">
+        <input type="file" id="file" src="img/" style="display: none;">
+        <label for="file" class="filebtn">Upload</label>
+        <input type="submit" class="btnform" value="OK">
+        </form>`;
+        form.id='form';
+        form.className='newForm';
+        let div = document.getElementById('card');
+        div.style.margin = '15vh';
+        document.body.append(form);
+
+        form.addEventListener('submit',(e) => {
+            const title = document.getElementById('title').value;
+            const description = document.querySelector('#desc').value;
+            if (title!=null && description!=null && title!='' && description!=''){
+                saveCard(title,description);
+            }
+            e.preventDefault();
+        });
+        
+        form.addEventListener('change', (e)=>{
+            let file = e.target.files[0];
+            uploadImg(file)
+            e.preventDefault();
+        })
+    }
 }
 
-function newCard(title, description,id){
-    const card = document.createElement('div');
-    card.innerHTML = `<li>Titulo: ${title}</li> 
+function newCard(title, description,id,img,count){
+    let card = document.createElement('div');
+    card.innerHTML = `<li class="img"></li>
+    <li>Titulo: ${title}</li> 
     <li>Descripcion: ${description}</li> 
-    <li class='cardId'>Identificacion: ${id}</li>
+    <li class='cardId'>Card ID: ${id}</li>
     <button class="editbtn">Edit ${title}</button>  `
     card.id = id;
     card.className = 'card';
     document.body.appendChild(card);
+    let cardImg = document.getElementsByClassName(`img`)[count];
+    cardImg.style.backgroundImage = `url("${img}")`;
     
 }
 
 //Eliminar cards
 const deleteId = () => {
-    let id = prompt('Ingrese el ID de la carta a eliminar', 'String ID');
-    if (id!=null && id!='String ID'){deleteCard(id)};  
+    //Crear form
+    if (typeof document.forms[0] == 'undefined'){
+        const form = document.createElement('form');
+        form.innerHTML = `<form>
+        <input type="text" class='input' placeholder="Card ID to delete">
+        <input type="submit" class="btnform" value="OK">
+        </form>`;
+        form.className = 'dltform';
+        form.id = 'form';
+        let div = document.getElementById('card');
+        div.style.margin = '11vh';
+        document.body.append(form)
+        form.addEventListener('submit', (e)=>{
+            const id = document.querySelector('input').value;
+            console.log(id);
+            if (id!=null && id!=undefined){deleteCard(id)}; 
+            e.preventDefault();
+        })
+    } else {
+        console.log('Ya existe un formulario')
+    }
+    
+     
 };
 
 // Boton
 const button = document.createElement('button');
 button.innerText = 'New';
-button.className = 'btnedit';
+button.className = 'btnnew';
 button.addEventListener("click", crear)
 document.body.appendChild(button)
 

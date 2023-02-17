@@ -1,7 +1,8 @@
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, onSnapshot, deleteDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-storage.js"
+import { getFirestore, collection, addDoc, getDocs, onSnapshot, deleteDoc, doc, getDoc, updateDoc} from "https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -45,4 +46,32 @@ const editCard = async (id, newFields) => {
   window.location.reload();
 }
 
-export{saveCard, listCards, onListCards, deleteCard, getCard, editCard};
+//Creando Storage
+const storage = getStorage();
+
+//Referencias
+//let emojiRef = ref(storage, 'emojibase.png');
+let emoji;
+
+
+//Funcion subir imagen
+function uploadImg(file){
+  emoji = file.name;
+  //ImagesRef apunta a 'images'
+  const imagesRef = ref(storage, 'images');
+  //emojiImagesRef apunta a 'images/emojibase'
+  const emojiImagesRef = ref(storage, 'images/' + emoji);
+
+  uploadBytes(emojiImagesRef, file).then((snapshot) => {
+    console.log(snapshot)
+  })
+}
+
+//Obtener imagenes
+const getImg = async (name) => {
+  const emojiImagesRef = ref(storage, 'images/' + name + '.png');
+  let img = await getDownloadURL(emojiImagesRef);
+  return img;
+}
+
+export {saveCard, listCards, onListCards, deleteCard, getCard, editCard, uploadImg, getImg};
